@@ -101,9 +101,6 @@ else:
         max_dias = max_dias_por_mes
         print(f"{y}Este año no es bisiesto{r}")
         
-    # Vamos a definir calendar como una lista, dentro de esta lista vamos a crear un bucle para que se generen 12 meses (sublistas)
-    # Dentro de cada mes generamos 31 dias [sublistas]
-    # Dentro de cada dia generamos una sublista la cual sera para eventos.
     calendar = {}
     # Nuestro calendar tendra esta estructura:
     # Nuestro calendar se va a componer de una variable (key) y una lista (value). La lisat (value) va a almacenar otros diccionarios.
