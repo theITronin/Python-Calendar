@@ -3,9 +3,9 @@ import json
 import os
 from colorama import Fore, Style, init
 
-init(autoreset=True) # Inicia colorama para Linux/Windows
+init(autoreset=True) # Initializes colorama for Linux/Windows
 
-c = Fore.LIGHTCYAN_EX # Definimos constantes para evitar funciones hardcodeadas.
+c = Fore.LIGHTCYAN_EX # We define constants to avoid hardcoded values.
 y = Fore.LIGHTYELLOW_EX
 r = Style.RESET_ALL
 w = Fore.LIGHTWHITE_EX
@@ -20,69 +20,69 @@ print(f"""{y}
 ░╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░╚══╝╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░╚════╝░
 {r}""")
 
-# Definimos una variable que guarde el comando segun el OS.
+# We define a variable that stores the command depending on the OS.
 if os.name == 'nt':
     clst = 'cls'
 elif os.name == 'posix':
     clst = 'clear'
 
 
-# Definimos listas con los dias de cada mes, si le pasamos el [mes] a esta lista devolvera los días que contiene ese mes.
+# We define lists with the days of each month; if we pass [month] to this list, it will return the number of days in that month.
 max_dias_por_mes = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 max_dias_por_mes_bisiesto = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-patron = r"^([01]\d|2[0-3]):([0-5]\d)$" # Definimos un patron que luego lo usaremos para validar la entrada de la fecha usando regex.
+patron = r"^([01]\d|2[0-3]):([0-5]\d)$" # We define a pattern that we will later use to validate the time input using regex.
 
 # ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class Evento(): # Definimos la clase Evento.
+class Evento(): # We define the Event class.
 
-    # Definimos un método reservado en el que indicamos todos los atributos/propiedades.
-    def __init__(self, nombre, hora=None, descripcion=""): # Este método estandar es el constructor de la clase, se encarga de inizializar el objeto. 
+    # We define a special method where we declare all attributes/properties.
+    def __init__(self, nombre, hora=None, descripcion=""): # This standard method is the class constructor; it initializes the object. 
         self.nombre = nombre 
         self.hora = hora
         self.descripcion = descripcion
             
-    def __str__(self): # Definimos otro método reservado en el que se especifica la representación del string del objeto. Cuando hagas un print del objeto se vera de esta forma:
+    def __str__(self): # We define another special method that specifies the string representation of the object. When you print the object, it will look like this:
         return(f"Hora: [{self.hora}] | Nombre: {self.nombre} | Descripción: {self.descripcion}")
     
-    def visual_evento(self): # Definimos otro método para estructurar la información en forma de diccionario. Esto es util para almacenarla.
+    def visual_evento(self): # We define another method to structure the information as a dictionary. This is useful for storing it.
         return {
             "nombre": self.nombre,
             "hora": self.hora,
             "descripcion": self.descripcion
         }
             
-    def mod_nombre(self, nuevo_nombre): # Este método se usara para cambiar el nombre del evento.
+    def mod_nombre(self, nuevo_nombre): # This method will be used to change the event name.
         self.nombre = nuevo_nombre
     
-    def mod_desc(self, nueva_descripcion): # Este método se usara para cambiar la descripción del evento.
+    def mod_desc(self, nueva_descripcion): # This method will be used to change the event description.
         self.descripcion = nueva_descripcion
     
-    def mod_hora(self, nueva_hora): # Este método se usara para cambiar la hora del evento.
+    def mod_hora(self, nueva_hora): # This method will be used to change the event time.
         self.hora = nueva_hora
                     
 # ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-# CREACIÓN ARCHIVO:
-# Hay dos condiciones, si el archivo existe lo va a leer y si el archivo no existe lo crea:
+# FILE CREATION:
+# There are two cases: if the file exists it will be read, and if it does not exist it will be created:
 if os.path.exists("calendario.json"):
     with open("calendario.json", "r") as archivo:
-        datos = json.load(archivo) # Carga variables las cuales su persistencia es necesaria.
+        datos = json.load(archivo) # Loads variables whose persistence is necessary.
         año = datos["año"]
         max_dias = datos["max_dias"]
         calendar = datos["calendar"]
         
-    # VAMOS A TRANSFORMAR DE FORMATO DE TEXTO A OBJETO (cargar los diccionarios al objeto).
-    # Usamos .items() para que 'fecha' sea la variable key y 'lista_dicts' sea el value (la lista de diccionarios que viene del JSON).
+    # We are going to transform from text format to object format (load dictionaries into objects).
+    # We use .items() so that 'fecha' is the key and 'lista_dicts' is the value (the list of dictionaries from the JSON).
     for fecha, lista_dicts in calendar.items():
-        # Con (**d) estamos pasando todas las keys a __init__, seria como hacer esto (Evento(nombre=d["nombre"], hora=d["hora"], desc=d["desc"])). 
-        # (**d) le dice a la clase "Extrae cada key y úsala como el atributo", "Extrae cada value y asignalo al parametro".
-        # Para que (**d) funcione, los keys y los atributos deben llamarse exactamente igual.
-        calendar[fecha] = [Evento(**d) for d in lista_dicts] # "d" itera cada valor de la lista "lista_dicts" y con esos diciconarios son pasados a la clase Evento para que se vuelvan objetos.
+        # With (**d) we pass all keys to __init__, it would be like doing this (Evento(nombre=d["nombre"], hora=d["hora"], desc=d["desc"])). 
+        # (**d) tells the class: "Extract each key and use it as an attribute", "Extract each value and assign it to the parameter".
+        # For (**d) to work, the keys and attributes must have exactly the same names.
+        calendar[fecha] = [Evento(**d) for d in lista_dicts] # "d" iterates over each value in the list "lista_dicts" and those dictionaries are passed to the Event class to become objects.
     print(f"{y}\n>>> Datos cargados desde el archivo correctamente.\nAbriendo calendario para al año {año}{r}")
 else: 
-    # Vamos a pedir de que año es este calendario
+    # We are going to ask which year this calendar is for
     while True:
         try:
             año = int(input(f"{c}Para que año es este calendario? {r}"))
@@ -91,8 +91,8 @@ else:
             print(f"{red}El valor ingresado no es valido.{r}")
             continue
     
-    # CALCULADORA AÑO BISIESTO
-    # Calculamos si [año] es bisiesto:
+    # LEAP YEAR CALCULATOR
+    # We calculate whether [year] is a leap year:
     es_bisiesto = (año % 4 == 0 and año % 100 != 0) or (año % 400 == 0)
     if es_bisiesto:
         max_dias = max_dias_por_mes_bisiesto
@@ -102,8 +102,8 @@ else:
         print(f"{y}Este año no es bisiesto{r}")
         
     calendar = {}
-    # Nuestro calendar tendra esta estructura:
-    # Nuestro calendar se va a componer de una variable (key) y una lista (value). La lisat (value) va a almacenar otros diccionarios.
+    # Our calendar will have this structure:
+    # Our calendar will be composed of a key and a list (value). The list (value) will store other dictionaries.
     #############################################################################################
     # "calendar": {                                                                             #
     #     "1-28": [                                                                             #
@@ -119,7 +119,7 @@ else:
     print(f"{y}\n>>> No se encontró archivo previo. Creando calendario nuevo.{r}")
     
 
-# Inciamos bucle de menu principal:
+# We start the main menu loop:
 while True:
     
     print(f"""{c}
@@ -134,12 +134,12 @@ while True:
     {r}""")
     
     try:
-        op = int(input(f"{c}Que deseas hacer: {r}")) # Indagamos que operación desea.
+        op = int(input(f"{c}Que deseas hacer: {r}")) # We ask which operation the user wants.
     except ValueError:
         print(f"{red}El dato ingresado es invalido{r}")
         continue
     
-    # Creamos condicionea para llamar a cada función:
+    # We create conditions to call each function:
     if op == 1:
         op_calendar.añadir_evento(calendar, max_dias, patron, clst, Evento)
         continue
@@ -154,19 +154,19 @@ while True:
         op_calendar.buscar_evento(calendar)
         
     elif op == 6:
-        calendar_guardable = {} # Definimos un diccionario vacio donde estructuraremos calendar para ser guardardo.
-        # La función ".items()" devuelve el key por un lado y el value por otro.
-        for fecha, lista_objetos in calendar.items(): # Creamos un bucle para que a fecha se le asigne el valor de la key y que a lista_objetos se le asigne el valor del value.
-            # Para cada fecha (key) en calendar_guardable,  vamos a guardar el objeto tratado usando la función viasual_evento para que se almacene en un formato correcto.
-            calendar_guardable[fecha] = [obj.visual_evento() for obj in lista_objetos]  # Por cada iteración del for "obj" se transforma en el objeto que esta iterando.
+        calendar_guardable = {} # We define an empty dictionary where we will structure the calendar to be saved.
+        # The ".items()" function returns the key on one side and the value on the other.
+        for fecha, lista_objetos in calendar.items(): # We create a loop so that 'fecha' gets the key and 'lista_objetos' gets the value.
+            # For each date (key) in calendar_guardable, we will save the processed object using the visual_evento function so it is stored in the correct format.
+            calendar_guardable[fecha] = [obj.visual_evento() for obj in lista_objetos]  # In each iteration of the loop, "obj" becomes the object being iterated.
         
-        datos_guardar = { # En datos guardar definimos todo lo que queremos que se guarde y con que estructura.
+        datos_guardar = { # In datos_guardar we define everything we want to save and its structure.
             "año": año,
             "max_dias": max_dias,
             "calendar": calendar_guardable
         }
         
-        with open("calendario.json", "w") as f: # Guardamos las variables que necesitan persistencia en el archivo:
+        with open("calendario.json", "w") as f: # We save the variables that need persistence into the file:
             json.dump(datos_guardar, f)
         print(f"{y}>>> Datos guardados. Saliendo...{r}")
         break
